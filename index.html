@@ -1,38 +1,32 @@
 <!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Avalon</title>
 <style>
-:root{--gold:#d4af5a;--ink:#eee6d2;--mut:#a9b5a8;--good:#5aaee0;--evil:#d9566e;--ok:#5bbf8a;--ln:#2b4238;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root{--gold:#d4af5a;--ink:#eee8d6;--mut:#a3b0a6;--good:#5aaee0;--evil:#d9566e;--ok:#5bbf8a;--ln:#27382f;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box}html,body{margin:0}
-body{color:var(--ink);font-family:'Palatino Linotype','Book Antiqua',Palatino,Georgia,serif;min-height:100vh;
-background:radial-gradient(circle at 82% 8%,#f6efcd 0,#f6efcd 13px,#f6efcd44 15px,#f6efcd00 95px),linear-gradient(#0c1730 0,#0f2a35 38%,#0d2a22 70%,#07130f 100%) fixed}
+body{color:var(--ink);font-family:'Palatino Linotype','Book Antiqua',Palatino,Georgia,serif;min-height:100vh;background:linear-gradient(#0b1424 0,#0e2230 45%,#0c241d 100%) fixed}
 #bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-#bg svg{position:absolute;left:0;right:0;bottom:0;width:100%;height:36vh}
-#bg .mist{position:absolute;left:0;bottom:6vh;width:200%;height:20vh;background:linear-gradient(90deg,transparent,#a8d8c426 20%,transparent 40%,#a8d8c41c 65%,transparent 85%);animation:ms 60s linear infinite}
-@keyframes ms{to{transform:translateX(-50%)}}
-#bg s{position:absolute;width:3px;height:3px;border-radius:50%;background:#f3e28a;box-shadow:0 0 8px 2px #f3e28aaa;animation:dr 12s ease-in-out infinite alternate,bl 4s ease-in-out infinite}
-@keyframes dr{to{transform:translate(34px,-46px)}}@keyframes bl{0%,100%{opacity:.08}50%{opacity:1}}
+#bg svg{position:absolute;left:0;right:0;bottom:0;width:100%;height:24vh}
 #app{max-width:480px;margin:0 auto;padding:16px 16px 40px;position:relative;z-index:1}
-h1{font-size:42px;letter-spacing:.3em;margin:6px 0 0;text-align:center;text-indent:.3em;background:linear-gradient(#f8e7a8,#b8913d);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 12px #d4af5a44)}
-h2{color:var(--gold);margin:6px 0 10px;font-size:22px;letter-spacing:.08em;font-weight:600}h2.c{margin-top:14px}h3{color:var(--gold);margin:16px 0 4px;font-size:16px;letter-spacing:.06em}
-p,li{line-height:1.55;font-size:15px}p{text-shadow:0 1px 4px #000a}ul{padding-left:20px;margin:4px 0}.mut{color:var(--mut);font-size:13px}.c{text-align:center}
-.card{background:linear-gradient(#15251f,#0f1b17);border:1px solid #d4af5a66;border-radius:14px;padding:16px;margin:12px 0;box-shadow:inset 0 0 0 3px #0f1b17,inset 0 0 0 4px #d4af5a2e,0 8px 24px #0009}
-.b{display:block;width:100%;padding:14px;margin:10px 0;border-radius:10px;border:1px solid #d4af5a88;background:linear-gradient(#1b3028,#12201a);color:var(--ink);font-weight:600;font-size:14px;font-family:inherit;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:transform .15s,box-shadow .25s,border-color .25s;box-shadow:0 2px 0 #0008}
-.b:active{transform:scale(.97)}@media(hover:hover){.b:hover{box-shadow:0 0 16px #d4af5a55;border-color:var(--gold)}}
-.b.gold{background:linear-gradient(#ecc977,#b8913d);color:#1a1a10;border-color:#f3dc92;text-shadow:0 1px 0 #fff5}
-.b.sm{width:48px;display:inline-block;margin:0;padding:8px;font-size:18px}.bk{width:auto;display:inline-block;margin:0;padding:8px 16px;font-size:12px}.b:disabled{opacity:.35}
-.b.sel{outline:3px solid var(--gold);background:linear-gradient(#4a4222,#2c2814)}.b.ok{border-color:var(--ok)}.b.no{border-color:var(--evil)}
+h1{font-size:38px;letter-spacing:.28em;margin:6px 0 0;text-align:center;text-indent:.28em;font-weight:600;background:linear-gradient(#f4e2a6,#c19c48);-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{color:var(--gold);margin:6px 0 10px;font-size:21px;letter-spacing:.08em;font-weight:600}h2.c{margin-top:14px}h3{color:var(--gold);margin:16px 0 4px;font-size:15px;letter-spacing:.06em}
+p,li{line-height:1.6;font-size:15px}ul{padding-left:20px;margin:4px 0}.mut{color:var(--mut);font-size:13px}.c{text-align:center}
+.card{background:#121f1a;border:1px solid #d4af5a40;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 8px 24px #0006}
+.b{display:block;width:100%;padding:14px;margin:10px 0;border-radius:10px;border:1px solid #d4af5a55;background:#16261f;color:var(--ink);font-weight:600;font-size:13px;font-family:inherit;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:transform .15s,border-color .25s,background .25s}
+.b:active{transform:scale(.97)}@media(hover:hover){.b:hover{border-color:var(--gold);background:#1b2f26}}
+.b.gold{background:#cfa954;color:#17170e;border-color:#e3c97f}@media(hover:hover){.b.gold:hover{background:#dbb862}}
+.b.sm{width:48px;display:inline-block;margin:0;padding:8px;font-size:18px}.bk{width:auto;display:inline-block;margin:0;padding:8px 16px;font-size:11px}.b:disabled{opacity:.35}
+.b.sel{outline:2px solid var(--gold);background:#2d2a16}.b.ok{border-color:var(--ok)}.b.no{border-color:var(--evil)}
 .row{display:flex;gap:10px;align-items:center;justify-content:space-between}.row .b{margin:0}
-input{width:100%;padding:12px;margin:5px 0;border-radius:10px;border:1px solid var(--ln);background:#09130f;color:var(--ink);font-size:16px;font-family:inherit}
-input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 10px #d4af5a44}
+input{width:100%;padding:12px;margin:5px 0;border-radius:10px;border:1px solid var(--ln);background:#0a1410;color:var(--ink);font-size:16px;font-family:inherit}
+input:focus{outline:none;border-color:var(--gold)}
 .track{display:flex;gap:8px;justify-content:center;margin:6px 0}
-.m{width:48px;height:48px;border-radius:50%;border:2px solid var(--ln);display:grid;place-items:center;font-weight:700;background:#09130f}
-.m.cur{border-color:var(--gold);box-shadow:0 0 12px #d4af5a66}.m.S{background:#1f5e96;border-color:var(--good)}.m.F{background:#8c1f35;border-color:var(--evil)}
-.fade .m.S,.fade .m.F{animation:pop .5s both}@keyframes pop{0%{transform:scale(.4)}70%{transform:scale(1.15)}100%{transform:scale(1)}}
-.chips{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:8px 0}.chips span{border:1px solid #d4af5a44;background:#0c1713cc;border-radius:20px;padding:4px 12px;font-size:12px;color:var(--mut)}.chips b{color:var(--ink)}
-.big{font-size:26px;text-align:center;margin:10px 0}.sub{text-align:center;color:var(--mut);letter-spacing:.35em;margin:2px 0 4px;font-size:13px;text-indent:.35em}.tag{text-align:center;color:var(--mut);font-style:italic;font-size:14px;margin:0}
-.orn{display:flex;align-items:center;gap:10px;justify-content:center;margin:10px 0 16px}.orn::before,.orn::after{content:'';height:1px;width:80px;background:linear-gradient(90deg,transparent,var(--gold))}.orn::after{transform:scaleX(-1)}.orn i{width:7px;height:7px;background:var(--gold);transform:rotate(45deg)}
-.sh{display:block;width:84px;margin:22px auto 0;animation:fl 4s ease-in-out infinite;filter:drop-shadow(0 0 14px #d4af5a66)}@keyframes fl{50%{transform:translateY(-6px)}}
-.sealw .sh{width:46px;margin:0 auto 8px;animation:none}
-.cas{display:block;width:100%;margin-top:26px;opacity:.9}
+.m{width:46px;height:46px;border-radius:50%;border:1.5px solid var(--ln);display:grid;place-items:center;font-weight:700;background:#0a1410}
+.m.cur{border-color:var(--gold)}.m.S{background:#1f5e96;border-color:var(--good)}.m.F{background:#8c1f35;border-color:var(--evil)}
+.fade .m.S,.fade .m.F{animation:pop .5s both}@keyframes pop{0%{transform:scale(.4)}70%{transform:scale(1.12)}100%{transform:scale(1)}}
+.chips{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:8px 0}.chips span{border:1px solid #d4af5a33;background:#0e1814;border-radius:20px;padding:4px 12px;font-size:12px;color:var(--mut)}.chips b{color:var(--ink)}
+.big{font-size:25px;text-align:center;margin:10px 0}.sub{text-align:center;color:var(--mut);letter-spacing:.35em;margin:2px 0 4px;font-size:12px;text-indent:.35em}.tag{text-align:center;color:var(--mut);font-style:italic;font-size:14px;margin:0}
+.orn{display:flex;align-items:center;gap:10px;justify-content:center;margin:10px 0 16px}.orn::before,.orn::after{content:'';height:1px;width:80px;background:linear-gradient(90deg,transparent,#d4af5a99)}.orn::after{transform:scaleX(-1)}.orn i{width:6px;height:6px;background:var(--gold);transform:rotate(45deg)}
+.sh{display:block;width:76px;margin:22px auto 0;animation:fl 5s ease-in-out infinite;filter:drop-shadow(0 0 8px #d4af5a33)}@keyframes fl{50%{transform:translateY(-5px)}}
+.sealw .sh{width:44px;margin:0 auto 8px;animation:none}
 .good{color:var(--good)}.evil{color:var(--evil)}.err{color:var(--evil);font-size:14px}
 table{width:100%;border-collapse:collapse;font-size:14px}td,th{border-bottom:1px solid var(--ln);padding:6px;text-align:center}
 .ov{position:fixed;inset:0;background:#000b;display:grid;place-items:center;padding:20px;z-index:9}.ov .card{max-width:360px;width:100%}
@@ -47,14 +41,14 @@ table{width:100%;border-collapse:collapse;font-size:14px}td,th{border-bottom:1px
 .cn{position:absolute;width:26px;height:26px}.tl{top:14px;left:16px}.br{bottom:14px;right:16px;transform:rotate(180deg)}
 .front>.art{width:130px;height:130px;margin:14px auto 6px;display:block}.front b{display:block;font-size:17px;letter-spacing:.04em}.front small{letter-spacing:.2em;color:var(--ac);font-weight:700}
 .rv{opacity:0;pointer-events:none;transform:translateY(8px);transition:opacity .5s .5s,transform .5s .5s}.fc.on~.rv{opacity:1;pointer-events:auto;transform:none}.fc.on~.hint{visibility:hidden}
-.rr{display:flex;gap:12px;align-items:center}.ic{flex:0 0 60px;height:60px;border-radius:50%;background:#efe3c2;padding:9px;border:2px solid var(--gold)}.ic.big{width:96px;height:96px;margin:0 auto 8px;flex:none;animation:gl 2.5s ease-in-out infinite alternate}@keyframes gl{to{box-shadow:0 0 28px #d4af5a99}}
+.rr{display:flex;gap:12px;align-items:center}.ic{flex:0 0 60px;height:60px;border-radius:50%;background:#efe3c2;padding:9px;border:2px solid var(--gold)}.ic.big{width:96px;height:96px;margin:0 auto 8px;flex:none;animation:gl 2.5s ease-in-out infinite alternate}@keyframes gl{to{box-shadow:0 0 22px #d4af5a77}}
 .mc{display:inline-grid;place-items:center;width:62px;height:84px;margin:4px;border-radius:8px;border:2px solid var(--gold);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700}.mc.s{background:#1f5e96}.mc.f{background:#8c1f35}
 .fade .mc{animation:fi .6s both;animation-delay:calc(var(--i)*.35s)}@keyframes fi{from{opacity:0;transform:rotateY(90deg) scale(.8)}to{opacity:1;transform:none}}.fade .vd{animation:f .5s both}
 @media(prefers-reduced-motion:reduce){*,*::before{animation:none!important;transition:none!important}}
 </style></head><body><div id="bg"></div><div id="app"></div>
 <script>
 const $=document.getElementById('app');
-const T=[[2,3,2,3,3],[2,3,4,3,4],[2,3,3,4,4],[3,4,4,5,5],[3,4,4,5,5],[3,4,4,5,5]],EV=[2,2,3,3,3,4],K='avalon_v3';
+const T=[[2,3,2,3,3],[2,3,4,3,4],[2,3,3,4,4],[3,4,4,5,5],[3,4,4,5,5],[3,4,4,5,5]],EV=[2,2,3,3,3,4],K='avalon_v4';
 const RN={Merlin:'Merlin',Percival:'Percival',Loyal:'Pelayan Setia Arthur',Assassin:'Assassin',Morgana:'Morgana',Minion:'Antek Mordred'};
 const RD={Merlin:'Good. Mengetahui semua pemain Evil. Jika Good menang 3 misi, Merlin harus bersembunyi dari Assassin.',Percival:'Good. Mengetahui Merlin dan Morgana, tetapi tidak tahu mana yang mana.',Loyal:'Good. Tidak punya informasi khusus. Andalkan logika dan diskusi.',Assassin:'Evil. Mengenal sekutu Evil. Jika Good menang 3 misi, menebak Merlin untuk membalikkan hasil.',Morgana:'Evil. Tampak seperti Merlin di mata Percival.',Minion:'Evil. Mengenal sekutu Evil dan menggagalkan misi.'};
 const sv=p=>`<svg class="art" viewBox="0 0 100 100">${p}</svg>`;
@@ -66,11 +60,11 @@ Percival:sv('<path d="M24 82V46Q24 16 50 16Q76 16 76 46V82Z"/><path class="g" d=
 Assassin:sv('<path d="M50 8L60 58H40Z"/><rect x="28" y="58" width="44" height="8" rx="3"/><rect x="45" y="66" width="10" height="20"/><circle class="g" cx="50" cy="90" r="4"/>'),
 Minion:sv('<path d="M28 80V50Q28 26 50 26Q72 26 72 50V80Z"/><path d="M28 48Q10 42 12 14Q30 22 36 40Z"/><path d="M72 48Q90 42 88 14Q70 22 64 40Z"/><path class="g" d="M38 50H62V58H38Z"/>')};
 const SH='<svg class="sh" viewBox="0 0 100 120"><path d="M50 4L92 18V58Q92 98 50 116Q8 98 8 58V18Z" fill="#0f1b17" stroke="#d4af5a" stroke-width="3"/><path d="M50 16L80 26V58Q80 88 50 102Q20 88 20 58V26Z" fill="none" stroke="#d4af5a" stroke-opacity=".5"/><path d="M50 24L54 32V74H62V80H54V90H46V80H38V74H46V32Z" fill="#d4af5a"/><circle cx="50" cy="95" r="3" fill="#d4af5a"/></svg>';
-const CAS='<svg class="cas" viewBox="0 0 258 80"><path fill="#06110d" stroke="#d4af5a" stroke-opacity=".4" d="M0 80V52h20V40h8v-8l8-10 8 10v8h8v12h24V36h10V20l10-12 10 12v16h10v16h22V44h14V30l8-12 8 12v14h14v8h20V40h8v-8l8-10 8 10v8h8v12h24v28Z"/></svg>';
-(function(){let r=11;const R=()=>(r=(r*9301+49297)%233280)/233280;
-const L=(n,a,b,f,o)=>{let d='';for(let i=0;i<n;i++){const x=(i+.5)*1000/n+(R()-.5)*30,h=a+R()*(b-a),w=h*.34,y=260;d+=`M${x-w} ${y}L${x} ${y-h*.7}L${x+w} ${y}ZM${x-w*.72} ${y-h*.38}L${x} ${y-h*.95}L${x+w*.72} ${y-h*.38}ZM${x-w*.45} ${y-h*.66}L${x} ${y-h*1.2}L${x+w*.45} ${y-h*.66}Z`}return`<path d="${d}" fill="${f}" opacity="${o}"/>`};
-let ff='';for(let i=0;i<16;i++)ff+=`<s style="left:${R()*100}%;top:${48+R()*48}%;animation-duration:${9+R()*8}s,${3+R()*4}s;animation-delay:${-R()*8}s,${-R()*6}s"></s>`;
-document.getElementById('bg').innerHTML=`<div class="mist"></div><svg viewBox="0 0 1000 260" preserveAspectRatio="xMidYMax slice">${L(26,90,150,'#143a2e',.85)}${L(20,70,120,'#0d281f',.95)}${L(15,50,95,'#06120d',1)}</svg>`+ff})();
+(function(){let r=7;const R=()=>(r=(r*9301+49297)%233280)/233280;let d='';
+for(let i=0;i<24;i++){const x=(i+.5)*1000/24+(R()-.5)*26,h=70+R()*60,w=h*.32,y=262;
+d+=`M${x-w} ${y}L${x} ${y-h*.68}L${x+w} ${y}ZM${x-w*.7} ${y-h*.38}L${x} ${y-h*.95}L${x+w*.7} ${y-h*.38}ZM${x-w*.42} ${y-h*.66}L${x} ${y-h*1.2}L${x+w*.42} ${y-h*.66}Z`}
+const castle='<path fill="#0c1d18" d="M0 80V52h20V40h8v-8l8-10 8 10v8h8v12h24V36h10V20l10-12 10 12v16h10v16h22V44h14V30l8-12 8 12v14h14v8h20V40h8v-8l8-10 8 10v8h8v12h24v28Z" transform="translate(600 160) scale(1.3)"/>';
+document.getElementById('bg').innerHTML=`<svg viewBox="0 0 1000 260" preserveAspectRatio="xMidYMax slice">${castle}<path d="${d}" fill="#07120e"/></svg>`})();
 const isEvil=r=>r==='Assassin'||r==='Morgana'||r==='Minion';
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const B=(a,t,c='',x='')=>`<button class="b ${c}" data-a="${a}" ${x}>${t}</button>`;
@@ -129,7 +123,7 @@ case'assassin':{const a=p.find(x=>x.role==='Assassin');h+=pv?`<div class="card c
 case'end':h+=`<div class="card c"><div class="ic big ${g.winner==='Good'?'gd':'ev'}">${g.winner==='Good'?ART.Loyal:ART.Assassin}</div><h2>${g.winner==='Good'?'Tim Good Menang':'Tim Evil Menang'}</h2><p>${g.reason}</p></div><div class="card"><h3 style="margin-top:0">Role semua pemain</h3>`+p.map((x,i)=>`<div class="pl" style="--i:${i}"><span>${esc(x.name)}</span><b class="${isEvil(x.role)?'evil':'good'}">${RN[x.role]}</b></div>`).join('')+`</div>${B('again','Main lagi','gold')}${B('tomenu','Kembali ke menu')}`}
 if(!pv&&g.ph!=='end')h+=`<button class="b bk" style="margin-top:14px" data-a="pause">Menu</button>`;
 return h}
-function menu(){const g=S.g;return`${SH}<h1>AVALON</h1><p class="sub">THE RESISTANCE</p><p class="tag">Di balik kabut dan hutan Avalon</p>${ORN}${g&&g.ph!=='end'?B('cont','Lanjutkan permainan','gold'):''}${B('go','Mulai permainan',g&&g.ph!=='end'?'':'gold','data-i="lobby"')}${B('go','Cara bermain','','data-i="howto"')}${B('go','Daftar role','','data-i="roles"')}${B('go','Pengaturan','','data-i="settings"')}${CAS}`}
+function menu(){const g=S.g;return`${SH}<h1>AVALON</h1><p class="sub">THE RESISTANCE</p><p class="tag">Di balik kabut dan hutan Avalon</p>${ORN}${g&&g.ph!=='end'?B('cont','Lanjutkan permainan','gold'):''}${B('go','Mulai permainan',g&&g.ph!=='end'?'':'gold','data-i="lobby"')}${B('go','Cara bermain','','data-i="howto"')}${B('go','Daftar role','','data-i="roles"')}${B('go','Pengaturan','','data-i="settings"')}`}
 function lobby(){const n=S.names.length,ev=EV[n-5];return bar('Para Pemain')+`<div class="card"><div class="row">${B('np','−','sm','data-i="-1"')}<b>${n} pemain</b>${B('np','+','sm','data-i="1"')}</div>`+S.names.map((x,i)=>`<input data-n="${i}" value="${esc(x)}" placeholder="Nama pemain ${i+1}" maxlength="14">`).join('')+`<p class="mut">Good ${n-ev}, Evil ${ev}. Role: Merlin, Assassin${S.pm?', Percival, Morgana':''}, sisanya Pelayan Setia dan Antek Mordred.</p>${S.err?`<p class="err">${S.err}</p>`:''}</div>${B('start','Bagikan role dan mulai','gold')}`}
 function howto(){return bar('Cara Bermain')+`<div class="card"><h3 style="margin-top:0">A. Tujuan</h3><ul><li>Good menyelesaikan 3 dari 5 misi.</li><li>Evil menggagalkan 3 misi.</li><li>Jika Good menang 3 misi, Assassin menebak Merlin. Benar: Evil menang. Salah: Good menang.</li></ul>
 <h3>B. Role</h3><ul><li>Setiap pemain mendapat satu role acak dan rahasia.</li><li>Good: Merlin, Percival, Pelayan Setia Arthur.</li><li>Evil: Assassin, Morgana, Antek Mordred.</li><li>Role sesuai jumlah pemain dan pengaturan.</li></ul>
