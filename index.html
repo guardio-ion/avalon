@@ -44,6 +44,7 @@ table{width:100%;border-collapse:collapse;font-size:14px}td,th{border-bottom:1px
 .rr{display:flex;gap:12px;align-items:center}.ic{flex:0 0 60px;height:60px;border-radius:50%;background:#efe3c2;padding:9px;border:2px solid var(--gold)}.ic.big{width:96px;height:96px;margin:0 auto 8px;flex:none;animation:gl 2.5s ease-in-out infinite alternate}@keyframes gl{to{box-shadow:0 0 22px #d4af5a77}}
 .mc{display:inline-grid;place-items:center;width:62px;height:84px;margin:4px;border-radius:8px;border:2px solid var(--gold);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700}.mc.s{background:#1f5e96}.mc.f{background:#8c1f35}
 .fade .mc{animation:fi .6s both;animation-delay:calc(var(--i)*.35s)}@keyframes fi{from{opacity:0;transform:rotateY(90deg) scale(.8)}to{opacity:1;transform:none}}.fade .vd{animation:f .5s both}
+#tm{font-variant-numeric:tabular-nums;letter-spacing:.1em}
 @media(prefers-reduced-motion:reduce){*,*::before{animation:none!important;transition:none!important}}
 </style></head><body><div id="bg"></div><div id="app"></div>
 <script>
@@ -68,9 +69,10 @@ document.getElementById('bg').innerHTML=`<svg viewBox="0 0 1000 260" preserveAsp
 const isEvil=r=>r==='Assassin'||r==='Morgana'||r==='Minion';
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const B=(a,t,c='',x='')=>`<button class="b ${c}" data-a="${a}" ${x}>${t}</button>`;
-let S={scr:'menu',pm:true,names:Array(5).fill(''),g:null,err:''};
+let S={scr:'menu',pm:true,dur:120,names:Array(5).fill(''),g:null,err:''};
 try{const x=JSON.parse(localStorage.getItem(K));if(x&&x.names){S=x;if(S.g&&S.g.st==='priv'){S.g.st='hand';S.g.flip=false}}}catch(e){}
 const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
+if(S.dur==null)S.dur=120;
 const rnd=n=>{const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n};
 const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
 const need=g=>T[g.n-5][g.m],fails=g=>(g.m===3&&g.n>=7)?2:1;
@@ -84,18 +86,20 @@ case 'go':S.scr=i;S.err='';break;
 case 'cont':if(g.st==='priv')g.st='hand';S.scr='game';break;
 case 'pause':if(g.st==='priv')g.st='hand';S.scr='menu';break;
 case 'pm':S.pm=!S.pm;break;
+case 'dur':{const o=[0,60,120,180,300];S.dur=o[(o.indexOf(S.dur)+1)%o.length];break}
 case 'np':{const n=S.names.length+ +i;if(n>=5&&n<=10){if(+i>0)S.names.push('');else S.names.pop()}break}
 case 'start':{const ns=S.names.map(x=>x.trim());if(ns.some(x=>!x)){S.err='Isi semua nama pemain.';break}if(new Set(ns.map(x=>x.toLowerCase())).size<ns.length){S.err='Nama pemain harus berbeda.';break}S.err='';if(S.g&&S.g.ph!=='end'){cfm('Permainan yang belum selesai akan diganti. Lanjutkan?',()=>{deal(ns);render()});break}deal(ns);break}
 case 'clear':cfm('Hapus progres permainan tersimpan?',()=>{S.g=null;render()});break;
 case 'ack':g.st='priv';g.pend=null;g.flip=false;break;
 case 'rdone':g.q++;g.st='hand';g.flip=false;if(g.q>=g.n){g.ph='team';g.q=0}break;
 case 'tog':{const k=g.team.indexOf(+i);if(k>=0)g.team.splice(k,1);else if(g.team.length<need(g))g.team.push(+i);break}
-case 'subteam':cfm('Kirim tim ini untuk divoting?',()=>{g.ph='vote';g.q=0;g.st='hand';g.votes=[];g.pend=null;render()});break;
+case 'subteam':cfm('Kirim tim ini untuk didiskusikan dan divoting?',()=>{g.ph='talk';g.tEnd=S.dur?Date.now()+S.dur*1000:0;render()});break;
+case 'tovote':g.ph='vote';g.q=0;g.st='hand';g.votes=[];g.pend=null;break;
 case 'pick':g.pend=i;break;
 case 'lockv':if(g.pend==null||g.votes.length!==g.q)break;g.votes.push(g.pend==='1');g.pend=null;g.q++;g.st='hand';if(g.q>=g.n)g.ph='voteres';break;
 case 'vnext':{if(g.votes.filter(Boolean).length*2>g.n){g.ph='mission';g.q=0;g.st='hand';g.cards=[]}else{g.rej++;g.team=[];if(g.rej>=5)fin('Evil','Lima usulan tim berturut-turut ditolak.');else{g.leader=(g.leader+1)%g.n;g.ph='team'}}break}
 case 'lockm':if(g.pend==null||g.cards.length!==g.q)break;g.cards.push(g.pend==='1');g.pend=null;g.q++;g.st='hand';if(g.q>=g.team.length){g.shown=shuf(g.cards);const f=g.cards.filter(x=>!x).length;g.res.push(f>=fails(g)?'F':'S');g.ph='missionres'}break;
-case 'mnext':{const s=g.res.filter(x=>x==='S').length,f=g.res.length-s;g.m++;g.rej=0;g.team=[];g.leader=(g.leader+1)%g.n;g.q=0;g.st='hand';if(f>=3)fin('Evil','Tiga misi gagal.');else if(s>=3)g.ph='discuss';else g.ph='team';break}
+case 'mnext':{const s=g.res.filter(x=>x==='S').length,f=g.res.length-s;g.m++;g.rej=0;g.team=[];g.leader=(g.leader+1)%g.n;g.q=0;g.st='hand';if(f>=3)fin('Evil','Tiga misi gagal.');else if(s>=3){g.ph='discuss';g.tEnd=S.dur?Date.now()+S.dur*1000:0}else g.ph='team';break}
 case 'toassn':g.ph='assassin';g.st='hand';g.pend=null;break;
 case 'locka':{const t=g.players[+g.pend],mer=g.players.find(p=>p.role==='Merlin');if(t.role==='Merlin')fin('Evil',`Assassin menebak ${esc(t.name)} dan benar: dia Merlin.`);else fin('Good',`Assassin menebak ${esc(t.name)}, salah. Merlin adalah ${esc(mer.name)}.`);break}
 case 'again':deal(g.players.map(p=>p.name));break;
@@ -109,16 +113,18 @@ const fcard=(r,on)=>{const ev=isEvil(r);return`<div class="fc ${on?'on':''} ${ev
 function info(g,i){const p=g.players,r=p[i].role,nm=f=>p.filter((x,j)=>j!==i&&f(x)).map(x=>esc(x.name));let l=[],t='Anda tidak mendapat informasi khusus.';
 if(r==='Merlin'){l=nm(x=>isEvil(x.role));t='Pemain Evil:'}else if(r==='Percival'){l=nm(x=>x.role==='Merlin'||x.role==='Morgana');t='Salah satu dari dua ini Merlin, satunya Morgana:'}else if(isEvil(r)){l=nm(x=>isEvil(x.role));t='Sekutu Evil Anda:'}
 return`<p>${t}</p>`+(l.length?`<div class="big">${l.join(', ')}</div>`:'')}
+const tmr=g=>g.tEnd?`<div class="big" id="tm" data-e="${g.tEnd}"></div>`:'';
 function game(){const g=S.g,p=g.players;let h='',pv=g.st==='priv';const cur=p[g.q];
 if(!pv&&g.ph!=='reveal')h+=hdr(g);
 switch(g.ph){
 case'reveal':h+=pv?`<p class="c mut">Role rahasia ${esc(cur.name)}</p>${fcard(cur.role,g.flip)}<p class="c mut hint">Ketuk kartu untuk membalik</p><div class="rv c">${info(g,g.q)}${B('rdone','Sembunyikan informasi dan selesai','gold')}</div>`:`<h2>Fase Pembukaan</h2><p class="mut">Pemain ${g.q+1} dari ${g.n}. Setiap pemain melihat role secara privat.</p>`+hand(cur.name,'Saya '+esc(cur.name)+', lihat role');break;
 case'team':{const nd=need(g);h+=`<div class="card"><h2>Pilih Tim Misi</h2><p><b>${esc(p[g.leader].name)}</b> (Leader) memilih <b>${nd}</b> anggota. Terpilih: ${g.team.length} dari ${nd}</p>`+p.map((x,i)=>B('tog',esc(x.name)+(i===g.leader?' (Leader)':''),g.team.includes(i)?'sel':'',`data-i="${i}"`)).join('')+B('subteam','Kirim tim untuk voting','gold',g.team.length===nd?'':'disabled')+`</div>`;break}
+case'talk':h+=`<div class="card c"><h2>Sesi Diskusi</h2><p><b>${esc(p[g.leader].name)}</b> mengusulkan tim: <b>${g.team.map(i=>esc(p[i].name)).join(', ')}</b></p><p class="mut">Berdiskusilah terbuka: tanyakan alasan, curigai, atau bela diri. Voting dimulai setelah semua siap.</p>${tmr(g)}${B('tovote','Mulai voting','gold')}</div>`;break;
 case'vote':h+=pv?`<div class="card c"><h2>Suara ${esc(cur.name)}</h2><p>Tim usulan: <b>${g.team.map(i=>esc(p[i].name)).join(', ')}</b></p>${B('pick','Setuju',g.pend==='1'?'sel ok':'ok','data-i="1"')}${B('pick','Tolak',g.pend==='0'?'sel no':'no','data-i="0"')}${B('lockv','Kunci suara dan sembunyikan','gold',g.pend==null?'disabled':'')}</div>`:`<h2>Voting Tim</h2><p class="mut">Pemilih ${g.q+1} dari ${g.n}. Tim: ${g.team.map(i=>esc(p[i].name)).join(', ')}</p>`+hand(cur.name,'Saya '+esc(cur.name)+', voting');break;
 case'voteres':{const ap=g.votes.filter(Boolean).length,ok=ap*2>g.n;h+=`<div class="card"><h2>Hasil Voting</h2>`+p.map((x,i)=>`<div class="pl" style="--i:${i}"><span>${esc(x.name)}</span><b class="${g.votes[i]?'good':'evil'}">${g.votes[i]?'Setuju':'Tolak'}</b></div>`).join('')+`<p class="big ${ok?'good':'evil'}">${ap} setuju, ${g.n-ap} tolak<br>${ok?'Tim diterima':'Tim ditolak'}</p>${B('vnext',ok?'Mulai misi':(g.rej+1>=5?'Lanjut':'Leader berikutnya'),'gold')}</div>`;break}
 case'mission':{const m=p[g.team[g.q]],ev=isEvil(m.role);h+=pv?`<div class="card c"><h2>Kartu Misi: ${esc(m.name)}</h2><p class="mut">${ev?'Anda Evil: boleh memilih Success atau Fail.':'Anda Good: wajib memilih Success.'}</p>${B('pick','Success',g.pend==='1'?'sel ok':'ok','data-i="1"')}${B('pick','Fail',g.pend==='0'?'sel no':'no','data-i="0"'+(ev?'':' disabled'))}${B('lockm','Kunci kartu dan sembunyikan','gold',g.pend==null?'disabled':'')}</div>`:`<h2>Pelaksanaan Misi</h2><p class="mut">Anggota ${g.q+1} dari ${g.team.length}.</p>`+hand(m.name,'Saya '+esc(m.name)+', pilih kartu');break}
 case'missionres':{const f=g.cards.filter(x=>!x).length,r=g.res[g.res.length-1];h+=`<div class="card c"><h2>Hasil Misi</h2><div>${g.shown.map((x,i)=>`<span class="mc ${x?'s':'f'}" style="--i:${i}">${x?'Success':'Fail'}</span>`).join('')}</div><div class="vd" style="animation-delay:${g.shown.length*.35+.3}s"><p>Success: ${g.cards.length-f}, Fail: ${f}</p><p class="big ${r==='S'?'good':'evil'}">${r==='S'?'Misi berhasil':'Misi gagal'}</p><p class="mut">Urutan kartu diacak; pemilih Fail tidak diungkap.</p></div>${B('mnext','Lanjutkan','gold')}</div>`;break}
-case'discuss':h+=`<div class="card c"><h2>Good Menang 3 Misi</h2><p>Good hampir menang. Evil punya satu kesempatan terakhir: Assassin menebak Merlin. Silakan berdiskusi, lalu Assassin mengambil HP.</p>${B('toassn','Lanjut ke fase Assassin','gold')}</div>`;break;
+case'discuss':h+=`<div class="card c"><h2>Good Menang 3 Misi</h2><p>Good hampir menang. Evil punya satu kesempatan terakhir: Assassin menebak Merlin. Silakan berdiskusi, lalu Assassin mengambil HP.</p>${tmr(g)}${B('toassn','Lanjut ke fase Assassin','gold')}</div>`;break;
 case'assassin':{const a=p.find(x=>x.role==='Assassin');h+=pv?`<div class="card c"><h2>Siapa Merlin?</h2><p class="mut">Pilih satu pemain.</p>`+p.map((x,i)=>isEvil(x.role)?'':B('pick',esc(x.name),g.pend===String(i)?'sel':'',`data-i="${i}"`)).join('')+B('locka','Konfirmasi tebakan','gold',g.pend==null?'disabled':'')+`</div>`:`<h2>Fase Assassin</h2>`+hand(a.name,'Saya '+esc(a.name)+', Assassin','Assassin mengungkap diri. Serahkan HP kepada');break}
 case'end':h+=`<div class="card c"><div class="ic big ${g.winner==='Good'?'gd':'ev'}">${g.winner==='Good'?ART.Loyal:ART.Assassin}</div><h2>${g.winner==='Good'?'Tim Good Menang':'Tim Evil Menang'}</h2><p>${g.reason}</p></div><div class="card"><h3 style="margin-top:0">Role semua pemain</h3>`+p.map((x,i)=>`<div class="pl" style="--i:${i}"><span>${esc(x.name)}</span><b class="${isEvil(x.role)?'evil':'good'}">${RN[x.role]}</b></div>`).join('')+`</div>${B('again','Main lagi','gold')}${B('tomenu','Kembali ke menu')}`}
 if(!pv&&g.ph!=='end')h+=`<button class="b bk" style="margin-top:14px" data-a="pause">Menu</button>`;
@@ -128,15 +134,17 @@ function lobby(){const n=S.names.length,ev=EV[n-5];return bar('Para Pemain')+`<d
 function howto(){return bar('Cara Bermain')+`<div class="card"><h3 style="margin-top:0">A. Tujuan</h3><ul><li>Good menyelesaikan 3 dari 5 misi.</li><li>Evil menggagalkan 3 misi.</li><li>Jika Good menang 3 misi, Assassin menebak Merlin. Benar: Evil menang. Salah: Good menang.</li></ul>
 <h3>B. Role</h3><ul><li>Setiap pemain mendapat satu role acak dan rahasia.</li><li>Good: Merlin, Percival, Pelayan Setia Arthur.</li><li>Evil: Assassin, Morgana, Antek Mordred.</li><li>Role sesuai jumlah pemain dan pengaturan.</li></ul>
 <h3>C. Fase Pembukaan</h3><ul><li>HP memberi instruksi bertahap. Tiap pemain membalik kartu role secara privat lalu menyembunyikannya.</li><li>Evil saling mengenal; Merlin melihat semua Evil; Percival melihat Merlin dan Morgana (tanpa tahu mana yang mana).</li></ul>
-<h3>D. Pemilihan Tim</h3><ul><li>Leader dan jumlah anggota tim ditentukan otomatis menurut jumlah pemain dan misi.</li><li>Leader memilih tim; semua memilih Setuju atau Tolak secara rahasia.</li><li>Mayoritas Setuju menerima tim. Seri berarti ditolak.</li><li>Jika ditolak, Leader pindah. Lima penolakan berturut-turut pada misi yang sama: Evil langsung menang.</li></ul>
+<h3>D. Pemilihan Tim</h3><ul><li>Leader dan jumlah anggota tim ditentukan otomatis menurut jumlah pemain dan misi.</li><li>Leader memilih tim; semua memilih Setuju atau Tolak secara rahasia.</li><li>Mayoritas Setuju menerima tim. Seri berarti ditolak.</li><li>Setelah tim diusulkan ada sesi diskusi terbuka sebelum voting (timer diatur di Pengaturan).</li><li>Jika ditolak, Leader pindah. Lima penolakan berturut-turut pada misi yang sama: Evil langsung menang.</li></ul>
 <h3>E. Pelaksanaan Misi</h3><ul><li>Hanya anggota tim memilih kartu Success atau Fail secara rahasia.</li><li>Good wajib Success; Evil boleh Success atau Fail.</li><li>Satu Fail menggagalkan misi. Misi ke-4 dengan 7+ pemain butuh dua Fail.</li><li>Kartu diacak sebelum ditampilkan; pemilih Fail tidak pernah diungkap.</li></ul>
 <h3>F. Hasil Misi</h3><ul><li>Indikator misi diperbarui dan Leader berpindah.</li><li>Good 3 misi: fase Assassin. Evil 3 misi gagal atau 5 penolakan: Evil menang.</li></ul>
 <h3>G. Etika</h3><ul><li>Jangan menunjukkan role atau mengintip pilihan pemain lain.</li><li>Boleh berdiskusi, berargumen, menggertak, dan mencurigai.</li><li>Ikuti instruksi moderator virtual.</li></ul></div>${B('go','Mulai permainan','gold','data-i="lobby"')}`}
 function roles(){return bar('Daftar Role')+Object.keys(RN).map(r=>`<div class="card rr ${isEvil(r)?'ev':'gd'}"><div class="ic">${ART[r]}</div><div><b class="${isEvil(r)?'evil':'good'}">${RN[r]}</b><p style="margin:4px 0 0">${RD[r]}</p></div></div>`).join('')+`<div class="card"><h3 style="margin-top:0">Komposisi dan anggota tim</h3><table><tr><th>Pemain</th><th>Good/Evil</th><th>Misi 1–5</th></tr>`+T.map((t,i)=>`<tr><td>${i+5}</td><td>${i+5-EV[i]}/${EV[i]}</td><td>${t.join(' ')}${i>=2?' <span class="mut">(misi 4: 2 Fail)</span>':''}</td></tr>`).join('')+`</table></div>`}
-function settings(){return bar('Pengaturan')+`<div class="card"><p><b>Percival dan Morgana</b><br><span class="mut">Role tambahan (varian). Matikan untuk aturan dasar tanpa keduanya.</span></p>${B('pm',S.pm?'Aktif':'Nonaktif',S.pm?'sel':'')}</div>${B('clear','Hapus progres tersimpan')}`}
+function settings(){return bar('Pengaturan')+`<div class="card"><p><b>Percival dan Morgana</b><br><span class="mut">Role tambahan (varian). Matikan untuk aturan dasar tanpa keduanya.</span></p>${B('pm',S.pm?'Aktif':'Nonaktif',S.pm?'sel':'')}</div><div class="card"><p><b>Timer diskusi</b><br><span class="mut">Batas waktu sesi diskusi. Tidak memblokir permainan.</span></p>${B('dur',S.dur?S.dur/60+' menit':'Tanpa timer')}</div>${B('clear','Hapus progres tersimpan')}`}
+function tick(){const t=document.getElementById('tm');if(!t)return;const s=Math.max(0,Math.ceil((+t.dataset.e-Date.now())/1000));t.textContent=s?Math.floor(s/60)+':'+String(s%60).padStart(2,'0'):'Waktu habis';t.classList.toggle('evil',!s)}
+setInterval(tick,500);
 let lastKey='',lastT=0;
 function render(){const g=S.g;let h='';switch(S.scr){case'menu':h=menu();break;case'lobby':h=lobby();break;case'howto':h=howto();break;case'roles':h=roles();break;case'settings':h=settings();break;case'game':h=g?game():menu()}
-const k=S.scr+(g?g.ph+g.q+g.st+g.m:'');$.innerHTML=`<div class="${k!==lastKey?'fade':''}">${h}</div>`;if(k!==lastKey){lastT=Date.now();window.scrollTo(0,0)}lastKey=k;save()}
+const k=S.scr+(g?g.ph+g.q+g.st+g.m:'');$.innerHTML=`<div class="${k!==lastKey?'fade':''}">${h}</div>`;if(k!==lastKey){lastT=Date.now();window.scrollTo(0,0)}lastKey=k;save();tick()}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b||b.disabled||Date.now()-lastT<450)return;
 if(b.dataset.a==='flip'){S.g.flip=b.classList.toggle('on');save();return}
 act(b.dataset.a,b.dataset.i);render()});
